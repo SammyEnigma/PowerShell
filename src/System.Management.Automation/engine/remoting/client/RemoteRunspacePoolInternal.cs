@@ -23,7 +23,7 @@ namespace System.Management.Automation.Runspaces.Internal
     /// Class which supports pooling remote powerShell runspaces
     /// on the client.
     /// </summary>
-    internal class RemoteRunspacePoolInternal : RunspacePoolInternal, IDisposable
+    internal sealed class RemoteRunspacePoolInternal : RunspacePoolInternal
     {
         #region Constructor
 
@@ -1215,7 +1215,7 @@ namespace System.Management.Automation.Runspaces.Internal
             return psCollection;
         }
 
-        ///<summary>
+        /// <summary>
         /// Returns RunspacePool capabilities.
         /// </summary>
         /// <returns>RunspacePoolCapability.</returns>
@@ -1894,20 +1894,10 @@ namespace System.Management.Automation.Runspaces.Internal
         #region IDisposable
 
         /// <summary>
-        /// Public method for Dispose.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         /// Release all resources.
         /// </summary>
         /// <param name="disposing">If true, release all managed resources.</param>
-        public override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             // dispose the base class before disposing dataStructure handler.
             base.Dispose(disposing);
@@ -2033,7 +2023,7 @@ namespace System.Management.Automation.Runspaces.Internal
                 powerShell.AddCommand("Get-WSManInstance");
 
                 // Add parameters to enumerate commands.
-                string filterStr = string.Format(CultureInfo.InvariantCulture, "ShellId='{0}'", shellId.ToString().ToUpperInvariant());
+                string filterStr = string.Create(CultureInfo.InvariantCulture, $"ShellId='{shellId.ToString().ToUpperInvariant()}'");
                 powerShell.AddParameter("ResourceURI", @"Shell/Command");
                 powerShell.AddParameter("Enumerate", true);
                 powerShell.AddParameter("Dialect", "Selector");

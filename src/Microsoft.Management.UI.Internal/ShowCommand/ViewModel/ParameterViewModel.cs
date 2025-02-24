@@ -159,7 +159,7 @@ namespace Microsoft.PowerShell.Commands.ShowCommandInternal
                 string returnValue = this.Parameter.Name;
                 if (this.Parameter.IsMandatory)
                 {
-                    returnValue = string.Format(CultureInfo.CurrentUICulture, "{0}{1}", returnValue, ShowCommandResources.MandatoryLabelSegment);
+                    returnValue = string.Create(CultureInfo.CurrentUICulture, $"{returnValue}{ShowCommandResources.MandatoryLabelSegment}");
                 }
 
                 return returnValue;
@@ -262,13 +262,11 @@ namespace Microsoft.PowerShell.Commands.ShowCommandInternal
         /// <param name="propertyName">The changed property.</param>
         private void OnNotifyPropertyChanged(string propertyName)
         {
-            #pragma warning disable IDE1005 // IDE1005: Delegate invocation can be simplified.
             PropertyChangedEventHandler handler = this.PropertyChanged;
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
-            #pragma warning restore IDE1005
         }
     }
 }
